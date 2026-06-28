@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "bmiCalculator": "tsc && node bmiCalculator.ts"
+    "bmiCalculator": "tsc && node bmiCalculator.ts",
+    "calculateExercises": "tsc && node exerciseCalculator.ts"
   },
   "author": "",
   "license": "ISC",
