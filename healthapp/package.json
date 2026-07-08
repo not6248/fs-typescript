@@ -7,12 +7,18 @@
   "scripts": {
     "tsc": "tsc",
     "bmiCalculator": "tsc && node bmiCalculator.ts",
-    "calculateExercises": "tsc && node exerciseCalculator.ts"
+    "calculateExercises": "tsc && node exerciseCalculator.ts",
+    "start": "node index.ts",
+    "dev": "tsc && node --watch index.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^26.0.1",
     "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
