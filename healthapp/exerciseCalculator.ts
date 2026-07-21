@@ -24,7 +24,7 @@ const parseArgumentsExercises = (args: string[]): Values => {
     const element = args[idx];
 
     if (isNaN(Number(element)))
-      throw new Error('Provided values were not numbers! 2');
+      throw new Error('Provided values were not numbers!');
 
     dailyExerciseHours.push(Number(element));
   }
@@ -36,7 +36,7 @@ const parseArgumentsExercises = (args: string[]): Values => {
   };
 };
 
-const calculateExercises = (dailyExerciseHours: number[], target: number): exercisesResult => {
+export const calculateExercises = (dailyExerciseHours: number[], target: number): exercisesResult => {
 
   const periodLength: number = dailyExerciseHours.length;
   const trainingDays: number = dailyExerciseHours.filter(h => h > 0).length;
