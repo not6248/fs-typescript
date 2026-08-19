@@ -5,7 +5,6 @@ import type { DiagnosisEntry } from '../types.ts';
 const router = express.Router();
 
 router.get('/', (_req, res: Response<DiagnosisEntry[]>) => {
-  console.log("diagnoses.ts");
   res.send(diagnosisService.getDiagnoses());
 });
 
