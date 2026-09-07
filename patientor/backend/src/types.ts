@@ -17,7 +17,7 @@ export type Gender = typeof Gender [keyof typeof Gender];
 export const NewEntrySchema = z.object({
   name: z.string(),
   dateOfBirth: z.iso.date(),
-  ssn: z.iso.date(),
+  ssn: z.string(),
   gender: z.enum(Gender),
   occupation: z.string()
 });
