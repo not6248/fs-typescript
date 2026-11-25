@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 
 import { Diary, NewDiaryEntry, Weather, Visibility } from './types';
 
@@ -8,9 +8,19 @@ import axios from 'axios';
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [weather, setWeather] = useState<Weather>(Weather.Sunny);
-  const [visibility, setVisibility] = useState<Visibility>(Visibility.Great);
+  const [visibility, setVisibility] = useState<Visibility>(
+    Visibility.Great,
+  );
   const [date, setDate] = useState('');
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState<string>('');
+  const [errorMessage, seterrorMessage] = useState<string>('');
+
+  const setError = (message: string) => {
+    seterrorMessage(message);
+    setTimeout(() => {
+      seterrorMessage('');
+    }, 3000);
+  };
 
   useEffect(() => {
     const fetchDiariesList = async () => {
@@ -36,13 +46,25 @@ function App() {
             '',
           );
           console.error(message);
+          setError(message);
         } else {
-          console.error('Unrecognized axios error');
+          type ValueKey = keyof typeof values;
+          const path = e?.response?.data.error[0].path[0] as ValueKey;
+          setError(`Error: Incorrect ${path} : ${values[path] || 'null'}`);
         }
       } else {
-        console.error('Unknown error');
+        console.error('Unknown error', e);
+        setError('Unknown error');
       }
     }
+  };
+
+  const handleVisibilityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setVisibility(event.target.value as Visibility);
+  };
+
+  const handleWeatherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWeather(event.target.value as Weather);
   };
 
   const addDiary = (event: SyntheticEvent) => {
@@ -58,41 +80,96 @@ function App() {
   return (
     <>
       <div>
+        <h3>Add new entry</h3>
+        <span style={{ color: 'red' }}>{errorMessage}</span>
         <form onSubmit={addDiary}>
           <label>
-            <span>weather :</span>
-            <select
-              name='weather'
-              value={weather}
-              onChange={({ target }) => setWeather(target.value)}
-            >
-              <option value='sunny'>Sunny</option>
-              <option value='rainy'>Rainy</option>
-              <option value='cloudy'>Cloudy</option>
-              <option value='stormy'>Stormy</option>
-              <option value='windy'>Windy</option>
-            </select>
-          </label>
-          <br />
-          <label>
-            <span>Visibility :</span>
-            <select
-              name='visibility'
-              onChange={({ target }) => setVisibility(target.value)}
-            >
-              <option value='great'>Great</option>
-              <option value='good'>Good</option>
-              <option value='ok'>Ok</option>
-              <option value='poor'>Poor</option>
-            </select>
-          </label>
-          <br />
-          <label>
-            <span>Date: </span>
+            <span>date: </span>
             <input
               type='date'
               name='date'
+              value={date}
               onChange={({ target }) => setDate(target.value)}
+            />
+          </label>
+          <br />
+          <label>
+            <span>visibility : </span>
+            great
+            <input
+              type='radio'
+              name='visibility'
+              value='great'
+              checked={visibility === 'great'}
+              onChange={handleVisibilityChange}
+            />
+            good
+            <input
+              type='radio'
+              name='visibility'
+              value='good'
+              checked={visibility === 'good'}
+              onChange={handleVisibilityChange}
+            />
+            ok
+            <input
+              type='radio'
+              name='visibility'
+              value='ok'
+              checked={visibility === 'ok'}
+              onChange={handleVisibilityChange}
+            />
+            poor
+            <input
+              type='radio'
+              name='visibility'
+              value='poor'
+              checked={visibility === 'poor'}
+              onChange={handleVisibilityChange}
+            />
+          </label>
+          <br />
+          <label>
+            <span>weather : </span>
+            sunny
+            <input
+              type='radio'
+              name='weather'
+              value='sunny'
+              checked={weather === 'sunny'}
+              onChange={handleWeatherChange}
+            />
+            rainy
+            <input
+              type='radio'
+              name='weather'
+              value='rainy'
+              checked={weather === 'rainy'}
+              onChange={handleWeatherChange}
+            />
+            cloudy
+            <input
+              type='radio'
+              name='weather'
+              value='cloudy'
+              checked={weather === 'cloudy'}
+              onChange={handleWeatherChange}
+            />
+            stormy
+            <input
+              type='radio'
+              name='weather'
+              value='stormy'
+              checked={weather === 'stormy'}
+              onChange={handleWeatherChange}
+            />
+            windy
+            <input
+              type='radio'
+              name='weather'
+              value='windy'
+              checked={weather === 'windy'}
+              onChange={handleWeatherChange}
             />
           </label>
           <br />
@@ -101,6 +178,7 @@ function App() {
             <input
               type='comment'
               name='comment'
+              value={comment}
               onChange={({ target }) => setComment(target.value)}
             />
           </label>
